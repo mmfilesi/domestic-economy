@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MainHeader, MainFooter } from '../../components';
+import { MainHeader, MainFooter, ListEconomy } from '../../components';
 
 class ViewMain extends Component {
 
@@ -36,24 +36,10 @@ class ViewMain extends Component {
     return (
     <div className='view-main'>
       <MainHeader />
-        <h5>Ingresos</h5>
-        <ul>
-          { this.state.inputs.map((item) =>
-            <li key={item.id}> {item.description}: {item.quantity}</li>
-          ) }
-        </ul>
-        <p>
-          Subtotal ingresos: { this.state.subtotalInputs }
-        </p>
-        <h5>Gastos</h5>
-        <ul>
-          { this.state.outputs.map((item) =>
-            <li key={item.id}> {item.description}: {item.quantity}</li>
-          ) }
-        </ul>
-        <p>
-          Subtotal gastos: Subtotal: { this.state.subtotalOutputs }
-        </p>
+        {/* Ingresos */}
+        <ListEconomy subtitle='Ingresos' items={this.state.inputs} subtotal={this.state.subtotalInputs} />
+        {/* Gastos */}
+        <ListEconomy subtitle='Gastos' items={this.state.outputs} subtotal={this.state.subtotalOutputs} />
         <p>
             {( this.state.subtotalOutputs > this.state.subtotalInputs ) ?
              <span className='warning'>Cuidado, vamos mal.</span> :
