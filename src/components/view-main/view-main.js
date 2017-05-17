@@ -16,8 +16,13 @@ class ViewMain extends Component {
         {'id': '02', 'description': 'comida gato', 'quantity': 2}
       ],
       subtotalInputs: 0,
-      subtotalOutputs: 0
+      subtotalOutputs: 0,
+      showInputs: true,
+      showOutputs: true
     };
+
+    this.handleClickHideBlock = this.handleClickHideBlock.bind(this);
+    this.handleClickDeleteOutput = this.handleClickDeleteOutput.bind(this);
   }
 
   componentWillMount() {
@@ -32,14 +37,43 @@ class ViewMain extends Component {
     return arrayItems.reduce( (subtotal, next) => subtotal + next.quantity, 0)
   }
 
+  handleClickHideBlock(block) {
+    this.setState({[block]: !this.state[block]});
+  }
+
+  handleClickDeleteOutput(idOutput) {
+    let arrTemp = this.state.outputs.filter( (item)=> {
+      if ( item.id !== idOutput ) {
+        return true;
+      }
+      return false;
+    });
+
+    this.setState({outputs: arrTemp});
+  }
+
   render() {
     return (
     <div className='view-main'>
       <MainHeader />
         {/* Ingresos */}
-        <ListEconomy subtitle='Ingresos' items={this.state.inputs} subtotal={this.state.subtotalInputs} />
+        <h4>
+        <button onClick={ ()=> this.handleClickHideBlock('showInputs') } >
+          { this.state.showInputs ? '-' : '+' } Ingresos
+        </button>
+        </h4>
+        { this.state.showInputs &&
+        <ListEconomy items={this.state.inputs} subtotal={this.state.subtotalInputs} />
+        }
         {/* Gastos */}
-        <ListEconomy subtitle='Gastos' items={this.state.outputs} subtotal={this.state.subtotalOutputs} />
+        <h4>
+        <button onClick={ ()=> this.handleClickHideBlock('showOutputs') } >
+          { this.state.showOutputs ? '-' : '+' }  Gastos
+        </button>
+        </h4>
+        { this.state.showOutputs && 
+        <ListEconomy deleteItem={ this.handleClickDeleteOutput } items={this.state.outputs} subtotal={this.state.subtotalOutputs} />
+        }
         <p>
             {( this.state.subtotalOutputs > this.state.subtotalInputs ) ?
              <span className='warning'>Cuidado, vamos mal.</span> :
